@@ -4,6 +4,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
+from joblib import dump, load
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 dataset_dir = os.path.join(current_dir, 'aclImdb')
@@ -40,17 +41,50 @@ def preprocess_files(directory):
     return data, labels
 
 
+if os.path.exists('tfidf_model.joblib') and os.path.exists('classifier.joblib'):
+    print("Loading pre-trained model...")
+    vectorizer = load('tfidf_model.joblib')
+    classifier = load('classifier.joblib')
+else:
+    print("Training and saving the model...")
+    train_data, train_labels = preprocess_files(os.path.join(dataset_dir, 'train'))
+
+    vectorizer = TfidfVectorizer()
+    x_train = vectorizer.fit_transform(train_data)
+
+    # Train your classifier here (for example, using Logistic Regression)
+    from sklearn.linear_model import LogisticRegression
+    classifier = LogisticRegression()
+    classifier.fit(x_train, train_labels)
+
+    # Save the trained models
+    dump(vectorizer, 'tfidf_model.joblib')
+    dump(classifier, 'classifier.joblib')
+
+
+new_comment = "It’s episodes like these that make me feel like I’m watching a lost extended segment of the old muppet show between two muppets"
+
+preprocessed_comment = preprocess_text(new_comment)
+
+X_new = vectorizer.transform([preprocessed_comment])
+
+predicted_label = classifier.predict(X_new)
+
+if predicted_label[0] == 'pos':
+    print("The sentiment of the new comment is positive.")
+else:
+    print("The sentiment of the new comment is negative.")
 
 
 
-train_data, train_labels = preprocess_files(os.path.join(dataset_dir, 'train'))
+# train_data, train_labels = preprocess_files(os.path.join(dataset_dir, 'train'))
 
-test_data, test_labels = preprocess_files(os.path.join(dataset_dir, 'test'))
+# test_data, test_labels = preprocess_files(os.path.join(dataset_dir, 'test'))
 
-vectorizer = TfidfVectorizer()
-X_train = vectorizer.fit_transform(train_data)
-X_test  = vectorizer.fit_transform(test_data)
+# vectorizer = TfidfVectorizer()
+# X_train = vectorizer.fit_transform(train_data)
+# X_test  = vectorizer.fit_transform(test_data)
 
 
-print("Training data shape:", X_train.shape)
-print("Testing data shape:", X_test.shape)
+# print("Training data shape:", X_train.shape)
+# print("Testing data shape:", X_test.shape)
