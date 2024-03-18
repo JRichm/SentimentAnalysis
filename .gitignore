@@ -1,6 +1,4 @@
 
-server/
-
 .env
 venv
 aclimdb
@@ -9,4 +7,13 @@ notes.txt
 
 *.joblib
 
-server.py
+settings.py
+asgi.py
+wsgi.py
+*sqlite3
+
+*.pyc
+
+migrations
+
+*admin*
