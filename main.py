@@ -62,7 +62,7 @@ else:
     dump(classifier, 'classifier.joblib')
 
 
-new_comment = "It’s episodes like these that make me feel like I’m watching a lost extended segment of the old muppet show between two muppets"
+new_comment = "This was such a funny episode. genuinely was laughing through the whole thing"
 
 preprocessed_comment = preprocess_text(new_comment)
 
