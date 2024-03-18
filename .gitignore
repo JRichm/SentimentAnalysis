@@ -4,3 +4,5 @@ aclimdb
 notes.txt
 
 *.joblib
+
+server/server/settings.py
