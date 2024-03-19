@@ -4,7 +4,7 @@ from django.db import models
 class TestModel(models.Model):
     string = models.CharField(max_length=100)
     number = models.IntegerField()
-    check = models.BooleanField()
+    checkbox = models.BooleanField()
 
     def save(self, *args, **kwargs):
         if self.number < 10:

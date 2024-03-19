@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic import TemplateView  # Add this import
 
 urlpatterns = [
-    path("app/", include("app.urls")),
-    path("admin", admin.site.urls),
+    path('', TemplateView.as_view(template_name='index.html')),
+    path('app/', include('app.urls')),
+    path('admin/', admin.site.urls),
 ]
